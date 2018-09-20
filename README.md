@@ -10,7 +10,7 @@
 
 * **Support for X-Pack plugin:** At this moment the image that Paulo Pires uses does not support X-Pack.
 * **Support for default plugins:** At this moment the image that Paulo Pires uses is very minimalist. He disabled the default plugins, but this project does not.
-* **A new Dockerfile is created based in the official** image `docker.elastic.co/elasticsearch/elasticsearch:6.1.1`, thus it can be easier to migrate to a new elasticsearch version.
+* **A new Dockerfile is created based in the official** image `docker.elastic.co/elasticsearch/elasticsearch:6.4.1`, thus it can be easier to migrate to a new elasticsearch version.
 
 
 ### Disadvantages
