@@ -30,4 +30,5 @@ fi
 # run
 chown -R elasticsearch:elasticsearch $BASE
 chown -R elasticsearch:elasticsearch $BASE/data
+chown -R elasticsearch:elasticsearch $BASE/logs
 exec su elasticsearch /usr/local/bin/docker-entrypoint.sh

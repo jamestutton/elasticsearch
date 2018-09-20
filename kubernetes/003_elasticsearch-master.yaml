@@ -28,7 +28,7 @@ spec:
             add:
               - IPC_LOCK
               - SYS_RESOURCE
-        image: jamestutton/elasticsearch:6.4.1
+        image: jamestutton/elasticsearch:public
         imagePullPolicy: Always
         env:
         - name: NAMESPACE
