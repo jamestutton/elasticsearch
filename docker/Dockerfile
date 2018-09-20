@@ -26,4 +26,6 @@ COPY config /usr/share/elasticsearch/config
 # Copy run script
 COPY run.sh /
 
+RUN ["chmod", "+x", "/run.sh"]
+
 CMD ["/run.sh"]
