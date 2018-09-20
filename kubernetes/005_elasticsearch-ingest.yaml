@@ -40,7 +40,7 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         - name: "CLUSTER_NAME"
-          value: "UK-HG1-ELK"
+          value: "JAES"
         - name: NODE_MASTER
           value: "false"
         - name: NODE_DATA
