@@ -1,6 +1,6 @@
-FROM docker.elastic.co/elasticsearch/elasticsearch:6.1.1
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.4.1
 
-MAINTAINER https://github.com/cesargomezvela
+MAINTAINER https://github.com/jamestutton
 
 # Set environment variables defaults
 ENV ES_JAVA_OPTS "-Xms512m -Xmx512m"
