@@ -1,30 +1,36 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: es-data-non-persist
+  name: elasticsearch-master
+  namespace: elasticsearch
   labels:
     component: elasticsearch
-    role: data
+    role: master
 spec:
-  replicas: 2
+  replicas: 3
   template:
     metadata:
       labels:
         component: elasticsearch
-        role: data
+        role: master
     spec:
       initContainers:
       - name: init-sysctl
-        image: busybox:1.27.2
-        command:
-        - sysctl
-        - -w
-        - vm.max_map_count=262144
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true
       containers:
-      - name: es-data-non-persist
+      - name: elasticsearch-master
+        securityContext:
+          privileged: false
+          capabilities:
+            add:
+              - IPC_LOCK
+              - SYS_RESOURCE
         image: jamestutton/elasticsearch:6.4.1
+        imagePullPolicy: Always
         env:
         - name: NAMESPACE
           valueFrom:
@@ -34,45 +40,31 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: CLUSTER_NAME
-          value: JAES
+        - name: "CLUSTER_NAME"
+          value: "JAES"
+        - name: "NUMBER_OF_MASTERS"
+          value: "2"
         - name: NODE_MASTER
-          value: "false"
+          value: "true"
         - name: NODE_INGEST
           value: "false"
+        - name: NODE_DATA
+          value: "false"
         - name: HTTP_ENABLE
-          value: "true"
-        - name: ES_JAVA_OPTS
-          value: -Xms1024m -Xmx1024m
-        - name: PROCESSORS
-          valueFrom:
-            resourceFieldRef:
-              resource: limits.cpu
-        resources:
-          requests:
-            cpu: 0.25
-          limits:
-            cpu: 1
+          value: "false"
+        - name: "ES_JAVA_OPTS"
+          value: "-Xms1024m -Xmx1024m"
         ports:
-        - containerPort: 9200
-          name: http
         - containerPort: 9300
           name: transport
+          protocol: TCP
         livenessProbe:
           tcpSocket:
-            port: transport
-          initialDelaySeconds: 20
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /_cluster/health
-            port: http
-          initialDelaySeconds: 20
-          timeoutSeconds: 5
+            port: 9300
         volumeMounts:
         - name: storage
           mountPath: /data
       volumes:
           - emptyDir:
               medium: ""
-            name: storage
+            name: "storage"

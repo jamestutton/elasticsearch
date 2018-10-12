@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: logstash-syslog
+  namespace: edge
+  labels:
+    component: elk
+    role: logstash-syslog
+spec:
+  replicas: 2
+  selector:
+    component: elk
+    role: logstash-syslog
+  template:
+    metadata:
+      labels:
+        component: elk
+        role: logstash-syslog
+    spec:
+      containers:
+      - name: logstash
+        image: docker.elastic.co/logstash/logstash-oss:6.4.2
+        ports:
+        - containerPort: 8514
+          name: syslog-tcp
+          protocol: TCP
+        - containerPort: 8514
+          name: syslog-udp
+          protocol: UDP
+        volumeMounts:
+        - mountPath: /usr/share/logstash/pipeline
+          name: logstash-pipeline
+        - mountPath: /usr/share/logstash/dict
+          name: logstash-dict
+        - mountPath: /usr/share/logstash/patterns
+          name: logstash-patterns
+      volumes:
+      - emptyDir:
+          medium: ""
+        name: "storage"
+      - hostPath:
+          path: "/mnt/logstash/logstash-syslog/pipeline"
+          type: DirectoryOrCreate
+        name: "logstash-pipeline"
+      - hostPath:
+          path: "/mnt/logstash/logstash-syslog/dict"
+          type: DirectoryOrCreate
+        name: "logstash-dict"
+      - hostPath:
+          path: "/mnt/logstash/logstash-syslog/patterns"
+          type: DirectoryOrCreate
+        name: "logstash-patterns"

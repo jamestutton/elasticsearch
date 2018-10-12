@@ -1,6 +1,6 @@
 # ElasticSearch cluster deployment on kubernetes
 
-This project is based on a rework of https://github.com/cesargomezvela/elasticsearch which is based on the work of **Paulo Pires**,https://github.com/pires/kubernetes-elasticsearch-cluster
+This project is based on a rework of https://github.com/cesargomezvela/elasticsearch which is based on the work of **Paulo Pires**,https://github.com/pires/kubernetelasticsearch-elasticsearch-cluster
 
 ### Deploy
 
@@ -16,6 +16,6 @@ kubectl rollout status -f 003_elasticsearch-master.yaml
 kubectl create -f 004_elasticsearch-ingest-svc.yaml
 kubectl rollout status -f 005_elasticsearch-ingest.yaml
 kubectl create -f 100_elasticsearch-nodeport.yaml
-kubectl create -f 900_es-data-non-persistant.yaml
-kubectl rollout status -f 900_es-data-non-persistant.yaml
+kubectl create -f 900_elasticsearch-data-non-persistant.yaml
+kubectl rollout status -f 900_elasticsearch-data-non-persistant.yaml
 ```

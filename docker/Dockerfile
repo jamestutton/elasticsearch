@@ -1,4 +1,4 @@
-FROM docker.elastic.co/elasticsearch/elasticsearch:6.4.1
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.4.2
 
 MAINTAINER https://github.com/jamestutton
 

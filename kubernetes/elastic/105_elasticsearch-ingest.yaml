@@ -1,17 +1,18 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: es-master
+  name: elasticsearch-ingest
+  namespace: elasticsearch
   labels:
     component: elasticsearch
-    role: master
+    role: ingest
 spec:
-  replicas: 3
+  replicas: 2
   template:
     metadata:
       labels:
         component: elasticsearch
-        role: master
+        role: ingest
     spec:
       initContainers:
       - name: init-sysctl
@@ -21,7 +22,7 @@ spec:
         securityContext:
           privileged: true
       containers:
-      - name: es-master
+      - name: elasticsearch-ingest
         securityContext:
           privileged: false
           capabilities:
@@ -41,25 +42,32 @@ spec:
               fieldPath: metadata.name
         - name: "CLUSTER_NAME"
           value: "JAES"
-        - name: "NUMBER_OF_MASTERS"
-          value: "2"
         - name: NODE_MASTER
-          value: "true"
-        - name: NODE_INGEST
           value: "false"
         - name: NODE_DATA
           value: "false"
         - name: HTTP_ENABLE
-          value: "false"
+          value: "true"
         - name: "ES_JAVA_OPTS"
           value: "-Xms1024m -Xmx1024m"
+        - name: "NETWORK_HOST"
+          value: "_site_,_lo_"
         ports:
+        - containerPort: 9200
+          name: http
+          protocol: TCP
         - containerPort: 9300
           name: transport
           protocol: TCP
         livenessProbe:
           tcpSocket:
             port: 9300
+        readinessProbe:
+          httpGet:
+            path: /_cluster/health
+            port: 9200
+          initialDelaySeconds: 20
+          timeoutSeconds: 5
         volumeMounts:
         - name: storage
           mountPath: /data

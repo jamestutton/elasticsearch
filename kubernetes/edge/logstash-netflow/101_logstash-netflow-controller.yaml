@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: logstash-netflow
+  namespace: edge
+  labels:
+    component: elk
+    role: logstash-netflow
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: elk
+        role: logstash-netflow
+    spec:
+      containers:
+      - name: logstash
+        image: docker.elastic.co/logstash/logstash-oss:6.4.2
+        ports:
+        - containerPort: 2055
+          name: netflow-udp
+          protocol: UDP
+        volumeMounts:
+        - mountPath: /usr/share/logstash/pipeline
+          name: logstash-pipeline
+        - mountPath: /usr/share/logstash/dict
+          name: logstash-dict
+      volumes:
+      - emptyDir:
+          medium: ""
+        name: "storage"
+      - hostPath:
+          path: "/mnt/logstash/logstash-netflow/pipeline"
+          type: DirectoryOrCreate
+        name: "logstash-pipeline"
+      - hostPath:
+          path: "/mnt/logstash/logstash-netflow/dict"
+          type: DirectoryOrCreate
+        name: "logstash-dict"

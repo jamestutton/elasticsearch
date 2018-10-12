@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vip-configmap
+  namespace: edge
+data:
+  192.168.18.30: edge/echoheaders-svc
+  192.168.18.32: edge/kibana-web-service
+  192.168.18.33: edge/logstash-netflow-udp2055-svc
+  192.168.18.34: edge/logstash-syslog-port30514-svc
+  192.168.18.35: edge/logstash-asa-syslog-30515-svc

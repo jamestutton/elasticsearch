@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: kibana-web
+  namespace: edge
+  labels:
+    component: elk
+    role: kibana-web
+spec:
+  replicas: 1
+  selector:
+    component: elk
+    role: kibana-web
+  template:
+    metadata:
+      labels:
+        component: elk
+        role: kibana-web
+    spec:
+      containers:
+      - name: kibana-web
+        image: docker.elastic.co/kibana/kibana-oss:6.4.2
+        resources:
+          # need more cpu upon initialization, therefore burstable class
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 100m
+        env:
+          - name: ELASTICSEARCH_URL
+            value: http://elasticsearch-ingest.elasticsearch:9200
+        ports:
+        - containerPort: 5601
+          name: ui
+          protocol: TCP
