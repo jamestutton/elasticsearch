@@ -25,7 +25,7 @@ spec:
           privileged: true
       containers:
       - name: elasticsearch-data-non-persist
-        image: jamestutton/elasticsearch:6.4.1
+        image: jamestutton/elasticsearch:6.4.2
         securityContext:
           privileged: true
         env:
