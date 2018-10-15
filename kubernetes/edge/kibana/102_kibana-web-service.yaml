@@ -12,8 +12,7 @@ spec:
     role: kibana-web
   ports:
   - name: kibana-web-service
-    port: 5061
+    port: 5601
     nodePort: 30561
-    targetPort: 5061
     protocol: TCP
   type: NodePort
